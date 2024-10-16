@@ -1,5 +1,5 @@
 # Dancing Organ
-## An electric organ project that allows users to intereactively explore the relationship between polyrhythm and polyphony.
+An electric organ project that allows users to intereactively explore the relationship between polyrhythm and polyphony.
 
 Code repo in progress.
 
