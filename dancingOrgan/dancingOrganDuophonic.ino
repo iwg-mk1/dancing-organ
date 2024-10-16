@@ -1,3 +1,5 @@
+//DUOPHONIC using split keyboard
+
 #include <USB-MIDI.h>
 
 USBMIDI_CREATE_DEFAULT_INSTANCE();
@@ -22,6 +24,7 @@ void setup() {
 unordered_map<int, float> noteMap;
 float voltage = 0;
 byte curNote = 0;
+byte keySplit = 
 
 void loop() {
   MIDI.read();
