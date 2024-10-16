@@ -4,7 +4,8 @@
 
 USBMIDI_CREATE_DEFAULT_INSTANCE();
 Adafruit_Crickit crickit;
-seesaw_Motor motor_m(&crickit);
+seesaw_Motor motor_b(&crickit);
+seesaw_Motor motor_s(&crickit);
 
 void setup() {
   Serial.begin(115200);
@@ -17,39 +18,52 @@ void setup() {
 
   MIDI.begin(1);
   MIDI.setHandleNoteOn(handleNoteOn);
+  //MIDI.setHandleNoteOff(handleNoteOff);
   MIDI.setHandleControlChange(handleControlChange);
 }
 
 //           note, voltage
 unordered_map<int, float> noteMap;
-float voltage = 0;
-byte curNote = 0;
-byte keySplit = 
+float voltageBig = 0;
+float voltageSmall = 0;
+byte curNoteBig = 0;
+byte curNoteSmall = 0;
+byte offsetBig = 0;
+byte offsetSmall = 0;
+byte keySplit = 60; //C4 (middle C)
 
 void loop() {
   MIDI.read();
-  motor_m.throttle(voltage);
-  if (CircuitPlayground.leftButton()) createNoteMap();
+  motor_b.throttle(voltageBig);
+  motor_s.throttle(voltageSmall);
 }
 
-//Currently set for calibration. eventually it should take note, match it with fundamental frequency
+//take note, match it with fundamental frequency
 void handleNoteOn(byte channel, byte note, byte velocity) {
-  curNote = note;
-  /*
-  voltage = noteMap(note);
-  */
+  if (note < 60) {
+    curNoteBig = note;
+    voltageBig = noteMap(note);
+  } else {
+    curNoteBig = note;
+    voltageBig = noteMap(note);
+  }
+}
+
+void handleNoteOff(byte channel, byte note, byte velocity) {
+  if(note == curNoteBig) {
+    curNoteBig = 0; //replace this
+    //Add signal to relay mute switch
+  } else if (note == curNoteSmall) {
+    curNoteSmall = 0; //replace this
+    //Add signal to relay mute switch
+  }
 }
 
 
 void handleControlChange(byte channel, byte number, byte value) {
   switch(number) {
     case 1: //Modulation wheel
-      voltage = (6.0/127.0) * value; //Voltage between 0 and 6 volts, might set to 1.5-6v later
       break;
   }
-}
-//Helper to create note map
-void createNoteMap() {
-  Serial.print("noteMap[\"" + note +   "\"] = " + voltage + ";");
 }
 
