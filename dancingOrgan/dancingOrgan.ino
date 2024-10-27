@@ -1,6 +1,8 @@
-#include <USB-MIDI.h>
+/*
 
-USBMIDI_CREATE_DEFAULT_INSTANCE();
+#include <MIDI.h>
+
+MIDI_CREATE_DEFAULT_INSTANCE();
 Adafruit_Crickit crickit;
 seesaw_Motor motor_m(&crickit);
 
@@ -34,7 +36,7 @@ void handleNoteOn(byte channel, byte note, byte velocity) {
   curNote = note;
   /*
   voltage = noteMap(note);
-  */
+
 }
 
 
@@ -49,4 +51,5 @@ void handleControlChange(byte channel, byte number, byte value) {
 void createNoteMap() {
   Serial.print("noteMap[\"" + note +   "\"] = " + voltage + ";");
 }
+*/
 

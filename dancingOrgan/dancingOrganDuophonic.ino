@@ -1,11 +1,25 @@
 //DUOPHONIC using split keyboard
+#include <Adafruit_TinyUSB.h>
+#include <MIDI.h>
+#include "Adafruit_Crickit.h"
+#include "seesaw_motor.h"
 
-#include <USB-MIDI.h>
-
-USBMIDI_CREATE_DEFAULT_INSTANCE();
+Adafruit_USBD_MIDI usb_midi;
+MIDI_CREATE_INSTANCE(Adafruit_USBD_MIDI, usb_midi, MIDI);
 Adafruit_Crickit crickit;
 seesaw_Motor motor_b(&crickit);
 seesaw_Motor motor_s(&crickit);
+
+//           note, voltage
+float noteMap[256]; 
+
+void setNoteMap() {
+  for (int i = 0; i < 256; i++) {
+    noteMap[i] = 1.5 + 4 * (i / 256.0);
+  }
+}
+
+
 
 void setup() {
   Serial.begin(115200);
@@ -20,10 +34,16 @@ void setup() {
   MIDI.setHandleNoteOn(handleNoteOn);
   //MIDI.setHandleNoteOff(handleNoteOff);
   MIDI.setHandleControlChange(handleControlChange);
+
+
+  motor_b.attach(CRICKIT_MOTOR_A1, CRICKIT_MOTOR_A2);
+  motor_s.attach(CRICKIT_MOTOR_B1, CRICKIT_MOTOR_B2);
+
+  setNoteMap();
 }
 
-//           note, voltage
-unordered_map<int, float> noteMap;
+
+
 float voltageBig = 0;
 float voltageSmall = 0;
 byte curNoteBig = 0;
@@ -42,10 +62,10 @@ void loop() {
 void handleNoteOn(byte channel, byte note, byte velocity) {
   if (note < 60) {
     curNoteBig = note;
-    voltageBig = noteMap(note);
+    voltageBig = noteMap[note];
   } else {
     curNoteBig = note;
-    voltageBig = noteMap(note);
+    voltageBig = noteMap[note];
   }
 }
 
