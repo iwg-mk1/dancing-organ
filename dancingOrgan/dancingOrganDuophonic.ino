@@ -1,4 +1,7 @@
 //DUOPHONIC using split keyboard
+
+/*
+
 #include <Adafruit_TinyUSB.h>
 #include <MIDI.h>
 #include "Adafruit_Crickit.h"
@@ -87,3 +90,4 @@ void handleControlChange(byte channel, byte number, byte value) {
   }
 }
 
+*/
