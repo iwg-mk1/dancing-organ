@@ -1,4 +1,4 @@
-# Dancing Organ
+# Dancing Organ -- Now Defunct
 An electric organ project that allows users to intereactively explore the relationship between polyrhythm and polyphony.
 
 Code repo in progress.
